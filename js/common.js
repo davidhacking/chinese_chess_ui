@@ -853,8 +853,12 @@ com.class.Dot = function (img, x, y) {
 	this.dots = []
 
 	this.show = function () {
+		var scale = com.scale;
+		if (scale > 1) {
+			scale = 1 + 2 * (scale - 1);
+		}
 		for (var i = 0; i < this.dots.length; i++) {
-			if (this.isShow) com.ct.drawImage(com.dotImg, com.spaceX * this.dots[i][0] + 10 + com.pointStartX, com.spaceY * this.dots[i][1] + 10 + com.pointStartY)
+			if (this.isShow) com.ct.drawImage(com.dotImg, com.spaceX * this.dots[i][0] + 10*scale + com.pointStartX, com.spaceY * this.dots[i][1] + 10*scale + com.pointStartY)
 		}
 	}
 }
