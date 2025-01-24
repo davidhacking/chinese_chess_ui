@@ -149,6 +149,16 @@ window.onload = function () {
 		com.get("menuDy").style.display = "block";
 	})
 
+	//双人对弈
+	com.get("normalPlay").addEventListener("click", function (e) {
+		play.isPlay = true;
+		var depth = parseInt(getRadioValue("depth"), 10) || 3;
+
+		play.init(depth);
+		com.get("chessBox").style.display = "block";
+		com.get("menuBox").style.display = "none";
+	})
+
 	//挑战棋局
 	com.get("indexQj").addEventListener("click", function (e) {
 		com.get("indexBox").style.display = "none";
