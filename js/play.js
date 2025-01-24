@@ -25,14 +25,6 @@ play.init = function (depth, map) {
 
 	//这么搞有点2，以后说不定出啥问题，先放着记着以后改
 	com.childList.length = 3
-	/*
-	l(com.childList)
-	for (var i=0; i<com.childList.length ; i++){
-		var o = com.childList[i];
-		if (o.pater) com.childList.splice(i, 1)
-	}
-	l(com.childList)
-	*/
 	com.createMans(map)		//生成棋子
 	com.bg.show();
 

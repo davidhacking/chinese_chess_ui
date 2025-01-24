@@ -6,6 +6,8 @@ normalPlay.init = function () {
     normalPlay.isPlay = true;
     normalPlay.currentPlayer = 1; // 1 表示红方，2 表示黑方
     normalPlay.map = com.arr2Clone(com.initMap); // 初始化棋盘
+    play.nowManKey = false;			//现在要操作的棋子
+	play.pace = [];				//记录每一步
     com.show(); // 显示棋盘
     // 绑定点击事件
     com.canvas.addEventListener("click", function (e) {
