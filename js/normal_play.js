@@ -3,23 +3,156 @@ var normalPlay = normalPlay || {};
 
 // 初始化双人对弈
 normalPlay.init = function () {
+    com.play_type = 1;
     normalPlay.isPlay = true;
-    normalPlay.currentPlayer = 1; // 1 表示红方，2 表示黑方
+    normalPlay.currentPlayer = 1; // 1 表示红方，-1 表示黑方 对应的是 man.my == 1 or -1
     normalPlay.map = com.arr2Clone(com.initMap); // 初始化棋盘
-    play.nowManKey = false;			//现在要操作的棋子
-	play.pace = [];				//记录每一步
+    normalPlay.nowManKey = false;			//现在要操作的棋子
+	normalPlay.pace = [];				//记录每一步
+    com.childList.length = 3
+	com.createMans(normalPlay.map)
     com.show(); // 显示棋盘
     // 绑定点击事件
-    com.canvas.addEventListener("click", function (e) {
-        if (!normalPlay.isPlay) return;
-        var man = normalPlay.getClickMan(e);
-        if (man) {
-            var newX = normalPlay.getClickPoint(e).x;
-            var newY = normalPlay.getClickPoint(e).y;
-            normalPlay.moveMan(man, newX, newY);
-        }
-    });
+	com.canvas.addEventListener("click", normalPlay.clickCanvas);
 };
+
+
+//悔棋
+normalPlay.regret = function () {
+	var map = com.arr2Clone(com.initMap);
+	//初始化所有棋子
+	for (var i = 0; i < map.length; i++) {
+		for (var n = 0; n < map[i].length; n++) {
+			var key = map[i][n];
+			if (key) {
+				com.mans[key].x = n;
+				com.mans[key].y = i;
+				com.mans[key].isShow = true;
+			}
+		}
+	}
+	var pace = normalPlay.pace;
+	pace.pop();
+	pace.pop();
+
+	for (var i = 0; i < pace.length; i++) {
+		var p = pace[i].split("")
+		var x = parseInt(p[0], 10);
+		var y = parseInt(p[1], 10);
+		var newX = parseInt(p[2], 10);
+		var newY = parseInt(p[3], 10);
+		var key = map[y][x];
+		//try{
+
+		var cMan = map[newY][newX];
+		if (cMan) com.mans[map[newY][newX]].isShow = false;
+		com.mans[key].x = newX;
+		com.mans[key].y = newY;
+		map[newY][newX] = key;
+		delete map[y][x];
+		if (i == pace.length - 1) {
+			com.showPane(newX, newY, x, y)
+		}
+	}
+	normalPlay.map = map;
+	normalPlay.my *= -1;
+	normalPlay.isPlay = true;
+	com.show();
+}
+
+normalPlay.clickCanvas = function (e) {
+	if (!normalPlay.isPlay) return false;
+	var key = normalPlay.getClickMan(e);
+	var point = normalPlay.getClickPoint(e);
+    console.log("clickMan", key);
+    console.log("clickPoint", point);
+	var x = point.x;
+	var y = point.y;
+
+	if (key) {
+		normalPlay.clickMan(key, x, y);
+	} else {
+		normalPlay.clickPoint(x, y);
+	}
+}
+
+normalPlay.indexOfPs = function (ps, xy) {
+	for (var i = 0; i < ps.length; i++) {
+		if (ps[i][0] == xy[0] && ps[i][1] == xy[1]) return true;
+	}
+	return false;
+
+}
+
+normalPlay.clickPoint = function (x, y) {
+	var nowSelectedKey = normalPlay.nowManKey;
+    if (!nowSelectedKey) {
+        return;
+    }
+	var man = com.mans[nowSelectedKey];
+    console.log("clickPoint man", man)
+    if (normalPlay.indexOfPs(man.ps, [x, y])) {
+        var pace = man.x + "" + man.y
+        delete normalPlay.map[man.y][man.x];
+        normalPlay.map[y][x] = nowSelectedKey;
+        com.showPane(man.x, man.y, x, y)
+        man.x = x;
+        man.y = y;
+        man.alpha = 1;
+        normalPlay.pace.push(pace + x + y);
+        normalPlay.nowManKey = false;
+        com.dot.dots = [];
+        com.show();
+        com.get("clickAudio").play();
+        normalPlay.currentPlayer *= -1;
+    }
+}
+
+normalPlay.clickMan = function (key, x, y) {
+	var man = com.mans[key];
+    var nowSelectedKey = normalPlay.nowManKey;
+    var isKillMan = nowSelectedKey && nowSelectedKey != key && man.my != com.mans[nowSelectedKey].my;
+    console.log("clickMan nowSelectedKey", nowSelectedKey);
+    console.log("clickMan man", man);
+    console.log("clickMan isKillMan", isKillMan);
+    // 选中棋子
+    if (key && !isKillMan) {
+        if (com.mans[key].my != normalPlay.currentPlayer) {
+            return;
+        }
+        if (com.mans[key]) 
+            com.mans[key].alpha = 1;
+        man.alpha = 0.8;
+        com.pane.isShow = false;
+        normalPlay.nowManKey = key;
+        com.mans[key].ps = com.mans[key].bl(normalPlay.map); //获得所有能着点
+        com.dot.dots = com.mans[key].ps
+        com.show();
+        com.get("selectAudio").play();
+        return;
+    }
+	//吃子
+    if (nowSelectedKey && isKillMan && play.indexOfPs(com.mans[nowSelectedKey].ps, [x, y])) {
+        man.isShow = false;
+        var pace = com.mans[nowSelectedKey].x + "" + com.mans[nowSelectedKey].y
+        delete normalPlay.map[com.mans[nowSelectedKey].y][com.mans[nowSelectedKey].x];
+        normalPlay.map[y][x] = nowSelectedKey;
+        com.showPane(com.mans[nowSelectedKey].x, com.mans[nowSelectedKey].y, x, y)
+        com.mans[nowSelectedKey].x = x;
+        com.mans[nowSelectedKey].y = y;
+        com.mans[nowSelectedKey].alpha = 1
+
+        normalPlay.pace.push(pace + x + y);
+        normalPlay.nowManKey = false;
+        com.pane.isShow = false;
+        com.dot.dots = [];
+        com.show()
+        com.get("clickAudio").play();
+        normalPlay.currentPlayer *= -1;
+        if (key == "j0") alert("黑方获胜！");;
+        if (key == "J0") alert("红方获胜！");
+    }
+}
 
 // 切换玩家
 normalPlay.switchPlayer = function () {

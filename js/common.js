@@ -5,6 +5,7 @@ var com = com || {};
 com.init = function (stype) {
 
 	com.nowStype = "stype2";
+	com.play_type = 0;
 	var stype = com.stype[com.nowStype];
 
 	// 动态调整棋盘尺寸
@@ -83,10 +84,6 @@ window.onload = function () {
 
 	com.childList = [com.bg, com.dot, com.pane];
 	com.mans = {};		//棋子集合
-	//com.createMans(com.initMap)		//生成棋子
-	//com.bg.show();
-	//play.init();
-
 	//开始对弈
 	com.get("playBtn").addEventListener("click", function (e) {
 		play.isPlay = true;
@@ -108,7 +105,14 @@ window.onload = function () {
 
 	// 悔棋
 	com.get("regretBtn").addEventListener("click", function (e) {
-		play.regret();
+		if (com.play_type == 0) {
+			play.regret();
+			return;
+		}
+		if (com.play_type == 1) {
+			normalPlay.regret();
+			return;
+		}
 	})
 
 	//返回首页
@@ -465,21 +469,21 @@ com.bylaw.c = function (x, y, map, my) {
 com.bylaw.m = function (x, y, map, my) {
 	var d = [];
 	//1点
-	if (y - 2 >= 0 && x + 1 <= 8 && !play.map[y - 1][x] && (!com.mans[map[y - 2][x + 1]] || com.mans[map[y - 2][x + 1]].my != my)) d.push([x + 1, y - 2]);
+	if (y - 2 >= 0 && x + 1 <= 8 && !map[y - 1][x] && (!com.mans[map[y - 2][x + 1]] || com.mans[map[y - 2][x + 1]].my != my)) d.push([x + 1, y - 2]);
 	//2点
-	if (y - 1 >= 0 && x + 2 <= 8 && !play.map[y][x + 1] && (!com.mans[map[y - 1][x + 2]] || com.mans[map[y - 1][x + 2]].my != my)) d.push([x + 2, y - 1]);
+	if (y - 1 >= 0 && x + 2 <= 8 && !map[y][x + 1] && (!com.mans[map[y - 1][x + 2]] || com.mans[map[y - 1][x + 2]].my != my)) d.push([x + 2, y - 1]);
 	//4点
-	if (y + 1 <= 9 && x + 2 <= 8 && !play.map[y][x + 1] && (!com.mans[map[y + 1][x + 2]] || com.mans[map[y + 1][x + 2]].my != my)) d.push([x + 2, y + 1]);
+	if (y + 1 <= 9 && x + 2 <= 8 && !map[y][x + 1] && (!com.mans[map[y + 1][x + 2]] || com.mans[map[y + 1][x + 2]].my != my)) d.push([x + 2, y + 1]);
 	//5点
-	if (y + 2 <= 9 && x + 1 <= 8 && !play.map[y + 1][x] && (!com.mans[map[y + 2][x + 1]] || com.mans[map[y + 2][x + 1]].my != my)) d.push([x + 1, y + 2]);
+	if (y + 2 <= 9 && x + 1 <= 8 && !map[y + 1][x] && (!com.mans[map[y + 2][x + 1]] || com.mans[map[y + 2][x + 1]].my != my)) d.push([x + 1, y + 2]);
 	//7点
-	if (y + 2 <= 9 && x - 1 >= 0 && !play.map[y + 1][x] && (!com.mans[map[y + 2][x - 1]] || com.mans[map[y + 2][x - 1]].my != my)) d.push([x - 1, y + 2]);
+	if (y + 2 <= 9 && x - 1 >= 0 && !map[y + 1][x] && (!com.mans[map[y + 2][x - 1]] || com.mans[map[y + 2][x - 1]].my != my)) d.push([x - 1, y + 2]);
 	//8点
-	if (y + 1 <= 9 && x - 2 >= 0 && !play.map[y][x - 1] && (!com.mans[map[y + 1][x - 2]] || com.mans[map[y + 1][x - 2]].my != my)) d.push([x - 2, y + 1]);
+	if (y + 1 <= 9 && x - 2 >= 0 && !map[y][x - 1] && (!com.mans[map[y + 1][x - 2]] || com.mans[map[y + 1][x - 2]].my != my)) d.push([x - 2, y + 1]);
 	//10点
-	if (y - 1 >= 0 && x - 2 >= 0 && !play.map[y][x - 1] && (!com.mans[map[y - 1][x - 2]] || com.mans[map[y - 1][x - 2]].my != my)) d.push([x - 2, y - 1]);
+	if (y - 1 >= 0 && x - 2 >= 0 && !map[y][x - 1] && (!com.mans[map[y - 1][x - 2]] || com.mans[map[y - 1][x - 2]].my != my)) d.push([x - 2, y - 1]);
 	//11点
-	if (y - 2 >= 0 && x - 1 >= 0 && !play.map[y - 1][x] && (!com.mans[map[y - 2][x - 1]] || com.mans[map[y - 2][x - 1]].my != my)) d.push([x - 1, y - 2]);
+	if (y - 2 >= 0 && x - 1 >= 0 && !map[y - 1][x] && (!com.mans[map[y - 2][x - 1]] || com.mans[map[y - 2][x - 1]].my != my)) d.push([x - 1, y - 2]);
 
 	return d;
 }
@@ -489,22 +493,22 @@ com.bylaw.x = function (x, y, map, my) {
 	var d = [];
 	if (my === 1) { //红方
 		//4点半
-		if (y + 2 <= 9 && x + 2 <= 8 && !play.map[y + 1][x + 1] && (!com.mans[map[y + 2][x + 2]] || com.mans[map[y + 2][x + 2]].my != my)) d.push([x + 2, y + 2]);
+		if (y + 2 <= 9 && x + 2 <= 8 && !map[y + 1][x + 1] && (!com.mans[map[y + 2][x + 2]] || com.mans[map[y + 2][x + 2]].my != my)) d.push([x + 2, y + 2]);
 		//7点半
-		if (y + 2 <= 9 && x - 2 >= 0 && !play.map[y + 1][x - 1] && (!com.mans[map[y + 2][x - 2]] || com.mans[map[y + 2][x - 2]].my != my)) d.push([x - 2, y + 2]);
+		if (y + 2 <= 9 && x - 2 >= 0 && !map[y + 1][x - 1] && (!com.mans[map[y + 2][x - 2]] || com.mans[map[y + 2][x - 2]].my != my)) d.push([x - 2, y + 2]);
 		//1点半
-		if (y - 2 >= 5 && x + 2 <= 8 && !play.map[y - 1][x + 1] && (!com.mans[map[y - 2][x + 2]] || com.mans[map[y - 2][x + 2]].my != my)) d.push([x + 2, y - 2]);
+		if (y - 2 >= 5 && x + 2 <= 8 && !map[y - 1][x + 1] && (!com.mans[map[y - 2][x + 2]] || com.mans[map[y - 2][x + 2]].my != my)) d.push([x + 2, y - 2]);
 		//10点半
-		if (y - 2 >= 5 && x - 2 >= 0 && !play.map[y - 1][x - 1] && (!com.mans[map[y - 2][x - 2]] || com.mans[map[y - 2][x - 2]].my != my)) d.push([x - 2, y - 2]);
+		if (y - 2 >= 5 && x - 2 >= 0 && !map[y - 1][x - 1] && (!com.mans[map[y - 2][x - 2]] || com.mans[map[y - 2][x - 2]].my != my)) d.push([x - 2, y - 2]);
 	} else {
 		//4点半
-		if (y + 2 <= 4 && x + 2 <= 8 && !play.map[y + 1][x + 1] && (!com.mans[map[y + 2][x + 2]] || com.mans[map[y + 2][x + 2]].my != my)) d.push([x + 2, y + 2]);
+		if (y + 2 <= 4 && x + 2 <= 8 && !map[y + 1][x + 1] && (!com.mans[map[y + 2][x + 2]] || com.mans[map[y + 2][x + 2]].my != my)) d.push([x + 2, y + 2]);
 		//7点半
-		if (y + 2 <= 4 && x - 2 >= 0 && !play.map[y + 1][x - 1] && (!com.mans[map[y + 2][x - 2]] || com.mans[map[y + 2][x - 2]].my != my)) d.push([x - 2, y + 2]);
+		if (y + 2 <= 4 && x - 2 >= 0 && !map[y + 1][x - 1] && (!com.mans[map[y + 2][x - 2]] || com.mans[map[y + 2][x - 2]].my != my)) d.push([x - 2, y + 2]);
 		//1点半
-		if (y - 2 >= 0 && x + 2 <= 8 && !play.map[y - 1][x + 1] && (!com.mans[map[y - 2][x + 2]] || com.mans[map[y - 2][x + 2]].my != my)) d.push([x + 2, y - 2]);
+		if (y - 2 >= 0 && x + 2 <= 8 && !map[y - 1][x + 1] && (!com.mans[map[y - 2][x + 2]] || com.mans[map[y - 2][x + 2]].my != my)) d.push([x + 2, y - 2]);
 		//10点半
-		if (y - 2 >= 0 && x - 2 >= 0 && !play.map[y - 1][x - 1] && (!com.mans[map[y - 2][x - 2]] || com.mans[map[y - 2][x - 2]].my != my)) d.push([x - 2, y - 2]);
+		if (y - 2 >= 0 && x - 2 >= 0 && !map[y - 1][x - 1] && (!com.mans[map[y - 2][x - 2]] || com.mans[map[y - 2][x - 2]].my != my)) d.push([x - 2, y - 2]);
 	}
 	return d;
 }
