@@ -827,7 +827,7 @@ com.class.Bg = function (img, x, y) {
 	this.isShow = true;
 
 	this.show = function () {
-		if (this.isShow) com.ct.drawImage(com.bgImg, com.spaceX * this.x, com.spaceY * this.y);
+		if (this.isShow) com.ct.drawImage(com.bgImg, com.spaceX * this.x, com.spaceY * this.y, com.width, com.height);
 	}
 }
 com.class.Pane = function (img, x, y) {
