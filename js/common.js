@@ -4,7 +4,7 @@ var com = com || {};
 
 com.init = function (stype) {
 
-	com.nowStype = stype || com.getCookie("stype") || "stype2";
+	com.nowStype = "stype2";
 	var stype = com.stype[com.nowStype];
 
 	// 动态调整棋盘尺寸
@@ -817,8 +817,8 @@ com.class.Man = function (key, x, y) {
 	}
 
 	this.bl = function (map) {
-		var map = map || play.map
-		return com.bylaw[o.bl](this.x, this.y, map, this.my)
+		var map = map || play.map;
+		return com.bylaw[o.bl](this.x, this.y, map, this.my);
 	}
 }
 
@@ -840,8 +840,10 @@ com.class.Pane = function (img, x, y) {
 
 	this.show = function () {
 		if (this.isShow) {
-			com.ct.drawImage(com.paneImg, com.spaceX * this.x + com.pointStartX, com.spaceY * this.y + com.pointStartY)
-			com.ct.drawImage(com.paneImg, com.spaceX * this.newX + com.pointStartX, com.spaceY * this.newY + com.pointStartY)
+			var width = com.paneImg.width * com.scale;
+			var height = com.paneImg.height * com.scale;
+			com.ct.drawImage(com.paneImg, com.spaceX * this.x + com.pointStartX, com.spaceY * this.y + com.pointStartY, width, height);
+			com.ct.drawImage(com.paneImg, com.spaceX * this.newX + com.pointStartX, com.spaceY * this.newY + com.pointStartY, width, height);
 		}
 	}
 }
