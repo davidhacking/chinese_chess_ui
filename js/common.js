@@ -6,22 +6,35 @@ com.init = function (stype){
 	
 	com.nowStype= stype || com.getCookie("stype") ||"stype2";
 	var stype = com.stype[com.nowStype];
-	com.width			=	stype.width;		//画布宽度
-	com.height			=	stype.height; 		//画布高度
-	com.spaceX			=	stype.spaceX;		//着点X跨度
-	com.spaceY			=	stype.spaceY;		//着点Y跨度
-	com.pointStartX		=	stype.pointStartX;	//第一个着点X坐标;
-	com.pointStartY		=	stype.pointStartY;	//第一个着点Y坐标;
-	com.page			=	stype.page;			//图片目录
 	
-	com.canvas			=	document.getElementById("chess"); //画布
-	com.ct				=	com.canvas.getContext("2d") ;
-	com.canvas.width	=	com.width;
-	com.canvas.height	=	com.height;
+	// 动态调整棋盘尺寸
+	var screenWidth = window.innerWidth;
+	var screenHeight = window.innerHeight;
+	var scale = Math.min(screenWidth / stype.width, screenHeight / stype.height) * 0.9; // 留出一些边距
+	com.width = stype.width * scale;
+	com.height = stype.height * scale;
+	com.spaceX = stype.spaceX * scale;
+	com.spaceY = stype.spaceY * scale;
+	com.pointStartX = stype.pointStartX * scale;
+	com.pointStartY = stype.pointStartY * scale;
 	
-	com.childList		=	com.childList||[];
-
-
+	// 确保棋盘不会超出画布边界
+	if (com.width > screenWidth) {
+		com.width = screenWidth;
+	}
+	if (com.height > screenHeight) {
+		com.height = screenHeight;
+	}
+	
+	com.page = stype.page;			//图片目录
+	
+	com.canvas = document.getElementById("chess"); //画布
+	com.ct = com.canvas.getContext("2d") ;
+	com.canvas.width = com.width;
+	com.canvas.height = com.height;
+	
+	com.childList = com.childList||[];
+	
 	com.loadImages(com.page);		//载入图片/图片目录
 	//z(com.initMap.join())
 }
