@@ -151,10 +151,7 @@ window.onload = function () {
 
 	//双人对弈
 	com.get("normalPlay").addEventListener("click", function (e) {
-		play.isPlay = true;
-		var depth = parseInt(getRadioValue("depth"), 10) || 3;
-
-		play.init(depth);
+	    normalPlay.init();
 		com.get("chessBox").style.display = "block";
 		com.get("menuBox").style.display = "none";
 	})
@@ -167,23 +164,23 @@ window.onload = function () {
 	})
 
 	//换肤
-	com.get("stypeBtn").addEventListener("click", function (e) {
-		var stype = com.nowStype;
-		if (stype == "stype3") stype = "stype2";
-		else if (stype == "stype2") stype = "stype1";
-		else if (stype == "stype1") stype = "stype3";
-		com.init(stype);
-		com.show();
-		//play.depth = 4;
-		//play.init();
-		document.cookie = "stype=" + stype;
-		clearInterval(timer);
-		var i = 0;
-		var timer = setInterval(function () {
-			com.show();
-			if (i++ >= 5) clearInterval(timer);
-		}, 2000);
-	})
+	// com.get("stypeBtn").addEventListener("click", function (e) {
+	// 	var stype = com.nowStype;
+	// 	if (stype == "stype3") stype = "stype2";
+	// 	else if (stype == "stype2") stype = "stype1";
+	// 	else if (stype == "stype1") stype = "stype3";
+	// 	com.init(stype);
+	// 	com.show();
+	// 	//play.depth = 4;
+	// 	//play.init();
+	// 	document.cookie = "stype=" + stype;
+	// 	clearInterval(timer);
+	// 	var i = 0;
+	// 	var timer = setInterval(function () {
+	// 		com.show();
+	// 		if (i++ >= 5) clearInterval(timer);
+	// 	}, 2000);
+	// })
 
 	//获取单选框选择的值
 	function getRadioValue(name) {

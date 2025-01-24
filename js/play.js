@@ -185,7 +185,6 @@ play.clickPoint = function (x, y) {
 			//alert("不能这么走哦！")
 		}
 	}
-
 }
 
 //Ai自动走棋
