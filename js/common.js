@@ -198,8 +198,6 @@ com.loadImages = function (stype) {
 	//绘制棋盘
 	com.bgImg = new Image();
 	com.bgImg.src = "img/" + stype + "/bg.png";
-	com.bgImg.width = com.width;
-	com.bgImg.height = com.height;
 
 	//提示点
 	com.dotImg = new Image();
@@ -810,7 +808,7 @@ com.class.Man = function (key, x, y) {
 		if (this.isShow) {
 			com.ct.save();
 			com.ct.globalAlpha = this.alpha;
-			com.ct.drawImage(com[this.pater].img, com.spaceX * this.x + com.pointStartX, com.spaceY * this.y + com.pointStartY);
+			com.ct.drawImage(com[this.pater].img, com.spaceX * this.x + com.pointStartX, com.spaceY * this.y + com.pointStartY, com.width, com.height);
 			com.ct.restore();
 		}
 	}
