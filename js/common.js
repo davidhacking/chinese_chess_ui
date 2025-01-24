@@ -11,6 +11,7 @@ com.init = function (stype) {
 	var screenWidth = window.innerWidth;
 	var screenHeight = window.innerHeight;
 	var scale = Math.min(screenWidth / stype.width, screenHeight / stype.height) * 0.9; // 留出一些边距
+	com.scale = scale;
 	com.width = stype.width * scale;
 	com.height = stype.height * scale;
 	com.spaceX = stype.spaceX * scale;
@@ -808,7 +809,9 @@ com.class.Man = function (key, x, y) {
 		if (this.isShow) {
 			com.ct.save();
 			com.ct.globalAlpha = this.alpha;
-			com.ct.drawImage(com[this.pater].img, com.spaceX * this.x + com.pointStartX, com.spaceY * this.y + com.pointStartY, com.width, com.height);
+			var width = com[this.pater].img.width * com.scale;
+			var height = com[this.pater].img.height * com.scale;
+			com.ct.drawImage(com[this.pater].img, com.spaceX * this.x + com.pointStartX, com.spaceY * this.y + com.pointStartY, width, height);
 			com.ct.restore();
 		}
 	}
