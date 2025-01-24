@@ -197,44 +197,30 @@ com.loadImages = function(stype){
 	
 	//绘制棋盘
 	com.bgImg = new Image();
-	com.bgImg.src  = "img/"+stype+"/bg_"+com.nowStype+".png"; // 修改为根据当前棋盘类型加载不同比例的图片
-	// 添加图片加载完成后的事件处理函数，设置图片的宽度和高度
+	com.bgImg.src  = "img/"+stype+"/bg.png";
 	com.bgImg.onload = function() {
 		com.bgImg.width = com.width;
 		com.bgImg.height = com.height;
-	};
+	}
 	
 	//提示点
 	com.dotImg = new Image();
-	com.dotImg.src  = "img/"+stype+"/dot_"+com.nowStype+".png"; // 修改为根据当前棋盘类型加载不同比例的图片
-	// 添加图片加载完成后的事件处理函数，设置图片的宽度和高度
-	com.dotImg.onload = function() {
-		com.dotImg.width = com.spaceX;
-		com.dotImg.height = com.spaceY;
-	};
+	com.dotImg.src  = "img/"+stype+"/dot.png";
 	
 	//棋子
 	for (var i in com.args){
 		com[i] = {};
 		com[i].img = new Image();
-		com[i].img.src = "img/"+stype+"/"+ com.args[i].img +"_"+com.nowStype+".png"; // 修改为根据当前棋盘类型加载不同比例的图片
-		// 添加图片加载完成后的事件处理函数，设置图片的宽度和高度
-		com[i].img.onload = function() {
-			this.width = com.spaceX;
-			this.height = com.spaceY;
-		};
+		com[i].img.src = "img/"+stype+"/"+ com.args[i].img +".png";
+		//com[i].img.src = "img/"+stype+"/r_m.png";
 	}
 	
 	//棋子外框
 	com.paneImg = new Image();
-	com.paneImg.src  = "img/"+stype+"/r_box_"+com.nowStype+".png"; // 修改为根据当前棋盘类型加载不同比例的图片
-	// 添加图片加载完成后的事件处理函数，设置图片的宽度和高度
-	com.paneImg.onload = function() {
-		this.width = com.spaceX;
-		this.height = com.spaceY;
-	};
+	com.paneImg.src  = "img/"+stype+"/r_box.png";
 	
-	document.getElementsByTagName("body")[0].style.background= "url(img/"+stype+"/bg_"+com.nowStype+".jpg)"; // 修改为根据当前棋盘类型加载不同比例的图片
+	document.getElementsByTagName("body")[0].style.background= "url(img/"+stype+"/bg.jpg)";
+	
 }
 
 //显示列表
