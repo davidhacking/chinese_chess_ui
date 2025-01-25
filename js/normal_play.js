@@ -17,6 +17,43 @@ normalPlay.init = function () {
 };
 
 // 通过着法移动棋子
+normalPlay.move = function (cmd) {
+    var x1 = cmd[0];
+    var y1 = cmd[1];
+    var x2 = parseInt(cmd[2]);
+    var y2 = parseInt(cmd[3]);
+    var key = normalPlay.map[y1][x1];
+    if (!key) {
+        return;
+    }
+    var man = com.mans[key];
+    if (!man || man.my != normalPlay.currentPlayer) {
+        return;
+    }
+    com.mans[key].ps = com.mans[key].bl(normalPlay.map);
+    var find = false;
+    for (var i = 0; i < com.mans[key].ps.length; i++) {
+        var x = com.mans[key].ps[i][0];
+        var y = com.mans[key].ps[i][1];
+        if (x == x2 && y == y2) {
+            find = true;
+            break;
+        }
+    }
+    if (!find) {
+        console.log("走法错误", com.mans[key].ps);
+        return;
+    }
+    normalPlay.nowManKey = key;
+    var key2 = normalPlay.map[y2][x2];
+    if (key2) {
+        normalPlay.clickMan(key2, x2, y2);
+    } else {
+        normalPlay.clickPoint(x2, y2);
+    }
+    console.log("cur pace", normalPlay.pace);
+    console.log("currentPlayer", normalPlay.currentPlayer);
+}
 
 //悔棋
 normalPlay.regret = function () {
