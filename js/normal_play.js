@@ -19,6 +19,9 @@ normalPlay.init = function () {
 
 //悔棋
 normalPlay.regret = function () {
+    var pace = normalPlay.pace;
+    if (pace.length == 0) return;
+	pace.pop();
 	var map = com.arr2Clone(com.initMap);
 	//初始化所有棋子
 	for (var i = 0; i < map.length; i++) {
@@ -31,9 +34,6 @@ normalPlay.regret = function () {
 			}
 		}
 	}
-	var pace = normalPlay.pace;
-	pace.pop();
-	pace.pop();
 
 	for (var i = 0; i < pace.length; i++) {
 		var p = pace[i].split("")
@@ -55,7 +55,7 @@ normalPlay.regret = function () {
 		}
 	}
 	normalPlay.map = map;
-	normalPlay.my *= -1;
+	normalPlay.currentPlayer *= -1;
 	normalPlay.isPlay = true;
 	com.show();
 }
@@ -115,14 +115,16 @@ normalPlay.clickMan = function (key, x, y) {
     console.log("clickMan nowSelectedKey", nowSelectedKey);
     console.log("clickMan man", man);
     console.log("clickMan isKillMan", isKillMan);
+    console.log("clickMan currentPlayer", normalPlay.currentPlayer);
     // 选中棋子
     if (key && !isKillMan) {
-        if (com.mans[key].my != normalPlay.currentPlayer) {
+        if (man.my != normalPlay.currentPlayer) {
             return;
         }
-        if (com.mans[key]) 
-            com.mans[key].alpha = 1;
         man.alpha = 0.8;
+        if (nowSelectedKey) {
+            com.mans[nowSelectedKey].alpha = 1;
+        }
         com.pane.isShow = false;
         normalPlay.nowManKey = key;
         com.mans[key].ps = com.mans[key].bl(normalPlay.map); //获得所有能着点
