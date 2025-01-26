@@ -139,11 +139,47 @@ window.onload = function () {
 	})
 
 	//重新开始棋局
-	com.get("restartBtn").addEventListener("click", function (e) {
-		if (confirm("是否确定要重新开始？")) {
-			play.isPlay = true;
-			play.init(play.depth, play.nowMap);
-		}
+	// com.get("restartBtn").addEventListener("click", function (e) {
+	// 	if (confirm("是否确定要重新开始？")) {
+	// 		play.isPlay = true;
+	// 		play.init(play.depth, play.nowMap);
+	// 	}
+	// })
+	com.aiPlayRequest = function (board, my) {
+		// 创建 XMLHttpRequest 对象
+		const xhr = new XMLHttpRequest();
+	
+		// 配置请求
+		xhr.open('POST', '/ai_play', true);
+		xhr.setRequestHeader('Content-Type', 'application/json');
+	
+		// 监听请求状态变化
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState === 4) {
+				if (xhr.status === 200) {
+					// 请求成功，处理响应数据
+					const response = JSON.parse(xhr.responseText);
+					console.log('请求成功:', response);
+					normalPlay.move(response.move);
+				} else {
+					// 请求失败，处理错误
+					console.error('请求失败:', xhr.statusText);
+				}
+			}
+		};
+	
+		// 准备请求数据
+		const data = JSON.stringify({
+			board: board,
+			my: my
+		});
+	
+		// 发送请求
+		xhr.send(data);
+	}
+
+	com.get("aiPlayBtn").addEventListener("click", function (e) {
+		com.aiPlayRequest(normalPlay.convertToBoard(normalPlay.map), normalPlay.currentPlayer);
 	})
 
 	//人机对弈
@@ -392,14 +428,14 @@ com.createMove = function (map, x, y, newX, newY) {
 
 com.initMap = [
 	['C0', 'M0', 'X0', 'S0', 'J0', 'S1', 'X1', 'M1', 'C1'],
-	[, , , , , , , ,],
-	[, 'P0', , , , , , 'P1',],
+	[, , , , , , , ,''],
+	[, 'P0', , , , , , 'P1',''],
 	['Z0', , 'Z1', , 'Z2', , 'Z3', , 'Z4'],
-	[, , , , , , , ,],
-	[, , , , , , , ,],
+	[, , , , , , , ,''],
+	[, , , , , , , ,''],
 	['z0', , 'z1', , 'z2', , 'z3', , 'z4'],
-	[, 'p0', , , , , , 'p1',],
-	[, , , , , , , ,],
+	[, 'p0', , , , , , 'p1',''],
+	[, , , , , , , ,''],
 	['c0', 'm0', 'x0', 's0', 'j0', 's1', 'x1', 'm1', 'c1']
 ];
 

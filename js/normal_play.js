@@ -16,6 +16,46 @@ normalPlay.init = function () {
     com.canvas.addEventListener("click", normalPlay.clickCanvas);
 };
 
+normalPlay.board_dict = {
+    'C': 'r',
+    'c': 'R',
+    'M': 'n',
+    'm': 'N',
+    'X': 'b',
+    'x': 'B',
+    'S': 'a',
+    's': 'A',
+    'J': 'k',
+    'j': 'K',
+    'P': 'c',
+    'p': 'C',
+    'Z': 'p',
+    'z': 'P',
+};
+
+normalPlay.convertToBoard = function (map) {
+    let result = "";
+    result += '               \n';
+    result += '               \n';
+    result += '               \n';
+    for (let row of map) {
+        let line = '   ';
+        for (let cell of row) {
+            if (cell === undefined || cell === '') {
+                line += '.';
+            } else {
+                line += normalPlay.board_dict[cell.charAt(0)];
+            }
+        }
+        line += '   \n';
+        result += line;
+    }
+    result += '               \n';
+    result += '               \n';
+    result += '               \n';
+    return result;
+};
+
 // 通过着法移动棋子
 normalPlay.move = function (cmd) {
     var x1 = cmd[0];
