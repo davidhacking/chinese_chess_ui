@@ -135,6 +135,11 @@ normalPlay.regret = function () {
     normalPlay.map = map;
     normalPlay.currentPlayer *= -1;
     normalPlay.isPlay = true;
+    if (normalPlay.nowManKey) {
+        com.mans[normalPlay.nowManKey].alpha = 1;
+    }
+    normalPlay.nowManKey = false;
+    com.dot.dots = [];
     com.show();
 }
 
