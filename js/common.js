@@ -161,9 +161,14 @@ window.onload = function () {
 					const response = JSON.parse(xhr.responseText);
 					console.log('请求成功:', response);
 					normalPlay.move(response.move);
+					var spinner = document.querySelector('.loading-container');
+					spinner.style.display = 'none';
 				} else {
 					// 请求失败，处理错误
 					console.error('请求失败:', xhr.statusText);
+					var spinner = document.querySelector('.loading-container');
+					spinner.style.display = 'none';
+					alert("请求AI服务失败");
 				}
 			}
 		};
@@ -173,7 +178,8 @@ window.onload = function () {
 			board: board,
 			my: my
 		});
-	
+		var spinner = document.querySelector('.loading-container');
+		spinner.style.display = 'flex';
 		// 发送请求
 		xhr.send(data);
 	}

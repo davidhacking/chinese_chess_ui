@@ -1,8 +1,38 @@
 body{  font-size: 12px; line-height: 150%; text-align:center}
 .chess_box,.menu_dy,.menu_qj{ display:none}
 .menu_box{ display:none1; width:316px; height:232px; padding-top:190px; background:url(../img/init_bg.png); margin:60px auto 0;}
-.menu_box a{ width:214px; height:46px; text-align:center; line-height:46px; background:url(../img/btn_bg.png) center 0 no-repeat; display:block; margin:10px 0 10px 45px; font: normal 18px/46px"�?�???�?"; color:#FF8A00; cursor:pointer; }
+.menu_box a{ width:214px; height:46px; text-align:center; line-height:46px; background:url(../img/btn_bg.png) center 0 no-repeat; display:block; margin:10px 0 10px 45px; font: normal 18px/46px"�?�???�?"; color:#FF8A00; cursor:pointer; }
 .menu_box a:hover{ background: url(../img/btn_bg.png) center -46px no-repeat; color: #FFA433;}
 .menu_info{ background:#463521; color:#FFF; padding:5px 10px; line-height:190%; text-align:left; width:194px;margin:10px 0 10px 45px;}
 .menu_fh{ background:url(../img/btn_fh.png); width:14px; height:14px; float:right; cursor:pointer}
-.bn_box input{font: normal 14px/46px"�?�???�?"; margin:3px 5px 0; padding:2px; width:100px }
+.bn_box input{font: normal 14px/46px"�?�???�?"; margin:3px 5px 0; padding:2px; width:100px }
+
+.loading-container {
+    display: none; /* 初始隐藏 */
+    flex-direction: column;
+    align-items: center;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #ddd; /* 背景色 */
+    border-top: 5px solid #4caf50; /* 进度条颜色 */
+    border-radius: 50%;
+    animation: spin 1s linear infinite; /* 旋转动画 */
+}
+
+.loading-text {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #000; /* 黑色文字 */
+    background-color: #fff; /* 白色背景 */
+    padding: 5px 10px; /* 添加内边距 */
+    border-radius: 5px; /* 圆角边框 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 添加阴影效果 */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
